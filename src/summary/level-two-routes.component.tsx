@@ -1,29 +1,41 @@
 import React from "react";
-import { match, Switch, Route } from "react-router";
+import { match, Route } from "react-router";
 import { AllergyCardLevelTwo } from "./history/allergy-card-level-two.component";
 import DimensionsCardLevelTwo from "./documentation/dimensions-card-level-two.component";
 import VitalsLevelTwo from "./documentation/vital-card-level-two.component";
+import { Breadcrumbs } from "./breadcrumbs/breadcrumbs.component";
+
+const levelTwoRoutes = [
+  {
+    url: "/patient/:patientUuid/chart/allergy",
+    component: AllergyCardLevelTwo
+  },
+  {
+    url: "/patient/:patientUuid/chart/dimensions",
+    component: DimensionsCardLevelTwo
+  },
+  {
+    url: "/patient/:patientUuid/chart/vitals",
+    component: VitalsLevelTwo
+  }
+];
 
 export function LevelTwoRoutes(props: LevelTwoRoutesProps) {
   return (
-    <main className="omrs-main-content">
-      <Switch>
-        <Route
-          exact
-          path={`/patient/:patientUuid/chart/allergy`}
-          render={routeProps => <AllergyCardLevelTwo match={props.match} />}
-        />
-        <Route
-          exact
-          path={`/patient/:patientUuid/chart/dimensions`}
-          render={routeProps => <DimensionsCardLevelTwo match={props.match} />}
-        />
-        <Route
-          exact
-          path={`/patient/:patientUuid/chart/vitals`}
-          render={routeProps => <VitalsLevelTwo match={props.match} />}
-        />
-      </Switch>
+    <main className="omrs-main-content" style={{ paddingTop: "2.75rem" }}>
+      <Route path="*" render={routeProps => <Breadcrumbs {...routeProps} />} />
+      {levelTwoRoutes.map(route => {
+        const Component = route.component;
+        return (
+          <Route
+            exact
+            key={route.url}
+            path={route.url}
+            render={routeProps => <Component match={routeProps.match} />}
+          />
+        );
+      })}
+      ;
     </main>
   );
 }

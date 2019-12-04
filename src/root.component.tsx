@@ -18,7 +18,7 @@ function Root(props) {
       />
       <Route
         path="/patient/:patientUuid/chart"
-        render={routeProps => <LevelTwoRoutes match={props.match} />}
+        render={routeProps => <LevelTwoRoutes match={routeProps.match} />}
       />
     </BrowserRouter>
   );
